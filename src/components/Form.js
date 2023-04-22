@@ -1,24 +1,42 @@
 import React, { useState } from "react";
 
-function Form(props) {
-  const [firstName, setFirstName] = useState("Sylvia");
-  const [lastName, setLastName] = useState("Woods");
+  function handleSubmit(event) {
+    event.preventDefault();
+    const errors = [];
+    if (firstName.trim() === '') {
+      errors.push('Please enter your first name.');
+    }
+    if (lastName.trim() === '') {
+      errors.push('Please enter your last name.');
+    }
+    if (errors.length > 0) {
+      setErrors(errors);
+      return;
+    }
+    const formData = { firstName: firstName, lastName: lastName };
+    const dataArray = [...submittedData, formData];
+    setSubmittedData(dataArray);
+    setFirstName('');
+    setLastName('');
+    setErrors([]);
 
-  function handleFirstNameChange(event) {
-    setFirstName(event.target.value);
+    const listOfErrors = errors.map((error, index) => {
+      return <div key={index}>{error}</div>;
+    });
+    
+    return (
+      <div>
+        <form onSubmit={handleSubmit}>
+          <input type="text" onChange={handleFirstNameChange} value={firstName} />
+          <input type="text" onChange={handleLastNameChange} value={lastName} />
+          <button type="submit">Submit</button>
+        </form>
+        <div>{listOfErrors}</div>
+        <h3>Submissions</h3>
+        {listOfSubmissions}
+      </div>
+    );
+    
   }
-
-  function handleLastNameChange(event) {
-    setLastName(event.target.value);
-  }
-
-  return (
-    <form>
-      <input type="text" onChange={handleFirstNameChange} value={firstName} />
-      <input type="text" onChange={handleLastNameChange} value={lastName} />
-      <button type="submit">Submit</button>
-    </form>
-  );
-}
 
 export default Form;
